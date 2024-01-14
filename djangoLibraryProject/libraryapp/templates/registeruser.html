@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title_block %}
+    <title>Register User</title>
+{% endblock %}
+
+<!-- body block -->
+{% block body_block %}
+
+ <form hx-post= "/signup/"
+      hx-target="#signupresponse">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button  type="submit">Register</button>
+   
+</form>
+
+<div id="signupresponse"></div>
+
+{% endblock %}
+<!-- /END body block -->

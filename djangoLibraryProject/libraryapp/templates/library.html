@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+<!-- title block -->
+{% block title_block %}
+    <title>Library</title>
+{% endblock %}
+<!-- /END title block -->
+
+<!-- import block -->
+{% block import_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous"></script>
+
+{% endblock %}
+<!-- /END title block -->
+
+
+<!-- body block -->
+{% block body_block %}
+
+{% if books %}
+   <script>
+        
+            document.body.addEventListener('htmx:afterSwap', (event) => {                                    
+                try {
+                        const response = event.detail.xhr.response;
+                        const res = JSON.parse(response);
+                        var rowToEdit = document.getElementById("book-row-"+res.id)
+                        var newtr = "<tr id='book-row-"+res.id+"'><td>"+res.id+"</td><td>"+res.title+"</td><td>"+res.author+"</td><td>"+res.date_checked_out+"</td><td>"+res.is_in_stock+"</td><td></td></tr>"
+                        console.log(rowToEdit)                    
+                        
+                        const rowToReplace = document.querySelector("tr#book-row-"+res.id);
+                        const newRow = newtr; // Assuming `newtr` holds a reference to the new row element
+                        
+                        if (rowToReplace) {
+                            $("tr#book-row-"+res.id).replaceWith(newtr);
+                        } else {
+                        // Handle the case where the row to replace is not found
+                        console.error("Row with ID book-row-${book_id} not found");
+                        }
+                  } 
+                  catch (error) {
+                    console.error("Invalid JSON string:", error);
+                }
+                             
+            
+          });                
+    </script>
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Checkout Date</th>
+                <th scope="col">In Stock?</th>
+                <th scope="col">Controls</th>
+            </tr>
+        </thead>
+        {% for book in books %}
+        <tbody>
+            <tr id="book-row-{{ book.id }}">
+                <td>{{book.id}}</td>
+                <td>{{book.title}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.date_checked_out}}</td>
+                <td>{{book.is_in_stock}}</td>
+                <td>
+                    {% if book.is_in_stock %}
+                    <div class="btn-toolbar" role="toolbar" id="data-controls">
+                        <button id="checkout-button-{{ book.id }}" value="{{ book.id }}" class="book-btn btn-info btn-sm"
+                        hx-post="{% url 'api-checkout' %}"
+                        hx-vars="{ 'pk': {{ book.id }} }"  
+                        hx-swap="innerHTML";
+                        ><i class="bi bi-arrow-right-square-fill"></i></button>  
+                    </div>                   
+                    
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    
+  
+
+{% else %}
+    <p>No Books Found</p>
+    <a href="/library/populate">Populate</a>
+{% endif %}
+
+{% endblock %}
+<!-- /END body block -->

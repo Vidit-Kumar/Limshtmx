@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+<!-- title block -->
+{% block title_block %}
+    <title>Acai - Login</title>
+{% endblock %}
+<!-- /END title block -->
+
+
+<!-- body block -->
+{% block body_block %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+    <a href="{% url 'signup' %}">Create Account</a>
+</form>
+
+{% endblock %}
+<!-- /END body block -->

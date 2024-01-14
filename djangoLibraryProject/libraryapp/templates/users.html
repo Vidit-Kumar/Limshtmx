@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+<!-- title block -->
+{% block title_block %}
+    <title>Acai - Users</title>
+{% endblock %}
+<!-- /END title block -->
+
+<!-- body block -->
+{% block body_block %}
+
+{% if users %}
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>UserName</th>
+            <th>E-mail</th>
+            </tr>
+        </thead>
+        {% for user in users %}
+        <tbody>
+            <tr>
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No Users</p>
+{% endif %}
+
+{% endblock %}
+<!-- /END body block -->

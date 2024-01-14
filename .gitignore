@@ -1,0 +1,16 @@
+# .gitignore
+
+# Database
+
+
+# Local development settings
+local_settings.py
+
+#
+ProjectRequirement.txt
+
+#
+.vscode
+
+#
+djangohtmxenv

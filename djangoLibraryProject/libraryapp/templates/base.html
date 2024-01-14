@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <!-- title block -->
+        {% block title_block %}
+        <!--  Title html-->
+        {% endblock %}
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script> 
+
+        {% block import_block %}
+        <!-- Inserts styles/js imports here-->
+        {% endblock %}
+        
+    </head>
+    <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>    
+        <!-- Nav Bar -->
+        <nav id="nav-bar" class="navbar navbar-expand-md shadow-sm navbar-dark bg-primary" style="margin-bottom: 10px">
+            <div class="container-fluid">
+                <!-- Nav Bar Branding -->
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand">
+                        <span id="LibraryApp-label" class="h5">LIBRARY APPLICATION</span>
+                    </a>
+                </div>
+                <!-- /END Nav Bar Branding -->
+
+                <!-- Nav Bar Definition -->
+                <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    {% if user.is_authenticated %}
+                        {% with request.resolver_match.url_name as url_name %}
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item"><a href="{% url 'library' %}" class="nav-link">Library</a></li>
+                                <li class="nav-item"><a href="{% url 'users' %}" class="nav-link">Users</a></li>
+                                <li class="nav-item"><a href="/admin/"><i class="nav-link bi bi-gear-fill"></i></a></li>
+                                <li class="nav-item "><a href="" class="nav-link">User: {{ user.get_username }}</a></li>
+                                <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
+                            </ul>
+                        {% endwith %}
+                    {% else %}
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                            <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">Register</a></li>
+                        </ul>
+                    {% endif %}
+                </div>
+                <!-- /END Nav Bar Definition -->
+            </div>
+        </nav>
+        <!-- /END Nav Bar -->   
+
+
+            <!-- added the hx-headers attribute to the body tag. This will ensure that HTMX requests include CSRF tokens in  compliance with Django’s security policy.
+        -->    
+   
+        <!-- Start Content -->
+            <div id="page-content" class="container">
+                <!-- body block -->
+                {% block body_block %}
+                    <!-- Inserts body html here-->
+                {% endblock %}
+                <!-- /END body block -->
+            </div>
+                <!-- /END Content -->
+                          
+
+
+    </body>
+</html>
