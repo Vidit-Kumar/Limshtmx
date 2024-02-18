@@ -37,14 +37,17 @@ class ChekoutApiView(APIView):
                     book.date_checked_out = timezone.now()
                     book.is_in_stock = False
                     book.save()
-                    return Response({'success': True,'message': 'Checkout Successfully','book': BookSerializer(book).data}, status=status.HTTP_200_OK)
+                    
+                    updated_row_html = f'<tr id=row-{book_id}><td>{book.titlle}</td><td>{book.author}</td><td>{book.publish_date}</td><td>{book.category}</td><td>{book.page_count}</td><td>{book.shelf_location}</td><td>{book.publish_date}</td><td>No</td><td><span>Already Checkout</span></td></tr>'
+
+                    return JsonResponse({'row_html': updated_row_html, 'book_id': book_id})
                 else:
                     return Response({'message': 'Book is not available for checkout'}, status=status.HTTP_400_BAD_REQUEST)
             except Library.DoesNotExist:
                 return Response({'message':'Book Not Found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 @api_view(['POST'])
 def checkout(request, *args, **kwargs):
@@ -60,7 +63,8 @@ def checkout(request, *args, **kwargs):
                     book.date_checked_out = timezone.now()
                     book.is_in_stock = False
                     book.save()
-                    return Response({'success': True,'message': 'Checkout Successfully','book': BookSerializer(book).data}, status=status.HTTP_200_OK)
+                    updated_row_html = f'<tr id=row-{book.id}><td>{book.titlle}</td><td>{book.author}</td><td>{book.publish_date}</td><td>{book.category}</td><td>{book.page_count}</td><td>{book.shelf_location}</td><td>{book.publish_date}</td><td>No</td><td><span>Already Checkout</span></td></tr>'
+                    return JsonResponse({'row_html': updated_row_html, 'book_id': book_id})
                 else:
                     return Response({'message': 'Book is not available for checkout'}, status=status.HTTP_400_BAD_REQUEST)
             except Library.DoesNotExist:
