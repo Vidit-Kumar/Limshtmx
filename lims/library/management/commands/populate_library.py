@@ -41,7 +41,7 @@ class Command(BaseCommand):
         return ''.join(random.choices(characters, k=length))
     
     def _generate_random_date(self):
-        start_date = timezone.now() - timezone.timedelta(days=365*10)  # 10 years ago
+        start_date = timezone.now() - timezone.timedelta(days=365*10)
         end_date = timezone.now()
         random_delta = datetime.timedelta(seconds=random.randint(0, int((end_date - start_date).total_seconds())))
         return start_date + random_delta
